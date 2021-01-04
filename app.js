@@ -1,7 +1,6 @@
 // *** variable declarations ***
 const submitButton = document.querySelector('#submit-button');
 const input = document.getElementById('pokemon-chosen'); 
-let isCardShowing = false;
 
 // *** function declarations ***
 const resetNeeded = () => {
@@ -30,17 +29,32 @@ const resetCard = () => {
 }
 
 const displayData = (data) => {
+    //stores name, image, and a base hp stat from the given pokemon
     let name = data.name;
     let image = data.sprites.front_shiny;
     let baseHp = data.stats[0].base_stat;
 
+
+    //creates tags and assigns properties to them based on the content
     let imageTag = document.createElement('img');
     imageTag.src = image;
     imageTag.id = 'newPokemonImage';
-    let card = document.getElementById('card').appendChild(imageTag);
-    if (!isCardShowing) {
-        card.setAttribute('style', "visibility: visible");
-    }
+
+    let newh1 = document.createElement("h1");
+    let h1content = document.createTextNode(name);
+    newh1.appendChild(h1content);
+    newh1.id = 'nametag';
+
+    let newp = document.createElement("p");
+    let pcontent = document.createTextNode(baseHp);
+    newp.appendChild(pcontent);
+
+    let card = document.getElementById('card');
+    card.appendChild(imageTag); 
+    card.appendChild(newh1);
+    card.appendChild(newp);
+    
+
 }
 
 const fetchPokemon = async (pokemon) => {
@@ -48,9 +62,7 @@ const fetchPokemon = async (pokemon) => {
         try {
             const response = await fetch('https://pokeapi.co/api/v2/pokemon/' + pokemon);
             let data = await response.json();
-            new Promise(resolve => {
-                displayData(data);
-            });       
+            displayData(await data);
         } catch (err) {
             console.log('an error has occured:', err);
         }
