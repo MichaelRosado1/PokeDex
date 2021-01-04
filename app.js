@@ -1,4 +1,5 @@
 const submitButton = document.querySelector('#submit-button');
+let isCardShowing = false;
 
 submitButton.addEventListener('click', () => {
     let chosenPokemon = document.getElementById('pokemon-chosen').value;
@@ -6,15 +7,21 @@ submitButton.addEventListener('click', () => {
     let reset = resetNeeded();
     if (reset(chosenPokemon)) {
         resetCard();
-    } else {
-        fetchPokemon(chosenPokemon);
-    }
+    } 
+    fetchPokemon(chosenPokemon);
 });
+
 const resetNeeded = () => {
+    //previous choice is saved as an empty string initially
     let previousChoice = "";
+    //return function compares previous choice to the current choice
     return (chosenPokemon) => {
+        console.log(previousChoice);
+        //if they are equal we want to reset the card
         if (chosenPokemon === previousChoice) {
             return true;
+        //otherwise we want to update the previous choice since the choice has changed
+        //also return false
         } else {
             previousChoice = chosenPokemon;
             return false;
@@ -24,14 +31,7 @@ const resetNeeded = () => {
 const resetCard = () => {
     //if the pokemon typed in is not the same as before
     console.log('previous selection ',previousSelection);
-    if (document.querySelector('#pokemon-chosen').value != previousSelection) {
-        //we want to clear every element so it won't add onto the previous data
-        let elements = document.querySelectorAll('.card');
-
-        elements.forEach((currentElement) => {
-            currentElement.value = '';
-        })
-    }
+    
 }
 
 const displayData = (data) => {
@@ -41,10 +41,10 @@ const displayData = (data) => {
 
     let imageTag = document.createElement('img');
     imageTag.src = image;
-    document.querySelector('.card').appendChild(imageTag);
-    console.log(name);
-    console.log(image);
-    console.log(baseHp);
+    let card = document.getElementById('card').appendChild(imageTag);
+    if (!isCardShowing) {
+        card.setAttribute('style', "visibility: visible");
+    }
 }
 
 const fetchPokemon = async (pokemon) => {
