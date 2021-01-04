@@ -1,30 +1,9 @@
+// *** variable declarations ***
 const submitButton = document.querySelector('#submit-button');
 const input = document.getElementById('pokemon-chosen'); 
 let isCardShowing = false;
 
-
-submitButton.addEventListener('click', () => {
-    let chosenPokemon = document.getElementById('pokemon-chosen').value;
-    //if the previous choice 
-    let reset = resetNeeded();
-    if (reset(chosenPokemon)) {
-        resetCard();
-    } 
-    fetchPokemon(chosenPokemon);
-});
-
-//function to press button if user presses enter
-input.addEventListener('keyup', (e) => {
-    console.log(e);
-    //if the key pressed is the enter key
-    if (e.keyCode=== 13) {
-        //prevent default actions with enter key
-        e.preventDefault();
-        //press submit button
-        submitButton.click();
-    }
-});
-
+// *** function declarations ***
 const resetNeeded = () => {
     //previous choice is saved as an empty string initially
     let previousChoice = "";
@@ -44,8 +23,10 @@ const resetNeeded = () => {
 }
 //dont need to check if previous is equal to current choice since that has already been checked
 const resetCard = () => {   
-    //want to clear previous images and stats from the card
-    
+    let element = document.getElementById('newPokemonImage');
+    if (typeof(element) != 'undefined' && element != null) {
+        element.remove();
+    }
 }
 
 const displayData = (data) => {
@@ -55,6 +36,7 @@ const displayData = (data) => {
 
     let imageTag = document.createElement('img');
     imageTag.src = image;
+    imageTag.id = 'newPokemonImage';
     let card = document.getElementById('card').appendChild(imageTag);
     if (!isCardShowing) {
         card.setAttribute('style', "visibility: visible");
@@ -75,3 +57,26 @@ const fetchPokemon = async (pokemon) => {
     } 
 
 }
+
+// *** event listeners ***
+let reset = resetNeeded();
+submitButton.addEventListener('click', () => {
+    let chosenPokemon = document.getElementById('pokemon-chosen').value;
+    //if the previous choice 
+    if (!reset(chosenPokemon)) {
+        resetCard();
+    } 
+    fetchPokemon(chosenPokemon);
+});
+
+//function to press button if user presses enter
+input.addEventListener('keyup', (e) => {
+    //if the key pressed is the enter key
+    if (e.keyCode=== 13) {
+        //prevent default actions with enter key
+        e.preventDefault();
+        //press submit button
+        submitButton.click();
+    }
+});
+
