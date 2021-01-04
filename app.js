@@ -1,5 +1,7 @@
 const submitButton = document.querySelector('#submit-button');
+const input = document.getElementById('pokemon-chosen'); 
 let isCardShowing = false;
+
 
 submitButton.addEventListener('click', () => {
     let chosenPokemon = document.getElementById('pokemon-chosen').value;
@@ -9,6 +11,18 @@ submitButton.addEventListener('click', () => {
         resetCard();
     } 
     fetchPokemon(chosenPokemon);
+});
+
+//function to press button if user presses enter
+input.addEventListener('keyup', (e) => {
+    console.log(e);
+    //if the key pressed is the enter key
+    if (e.keyCode=== 13) {
+        //prevent default actions with enter key
+        e.preventDefault();
+        //press submit button
+        submitButton.click();
+    }
 });
 
 const resetNeeded = () => {
@@ -28,9 +42,9 @@ const resetNeeded = () => {
         }
     } 
 }
-const resetCard = () => {
-    //if the pokemon typed in is not the same as before
-    console.log('previous selection ',previousSelection);
+//dont need to check if previous is equal to current choice since that has already been checked
+const resetCard = () => {   
+    //want to clear previous images and stats from the card
     
 }
 
